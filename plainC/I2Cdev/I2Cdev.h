@@ -44,8 +44,8 @@ THE SOFTWARE.
 */
 
 
-#ifndef _I2CDEV_H_
-#define _I2CDEV_H_
+#ifndef __I2CDEV_H__
+#define __I2CDEV_H__
 
 #include <avr/io.h>
 #include "msec.h"
@@ -120,5 +120,5 @@ uint8_t Fastwire_readBuf(uint8_t device, uint8_t address, uint8_t *data, uint8_t
 void Fastwire_reset(void);
 uint8_t Fastwire_stop(void);
 
+#endif /* __I2CDEV_H__ */
 
-#endif /* _I2CDEV_H_ */
