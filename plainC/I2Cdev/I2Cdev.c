@@ -46,7 +46,7 @@ THE SOFTWARE.
 #include "I2Cdev.h"
 
 // private functions
-uint8_t Fastwire_waitInt();
+uint8_t Fastwire_waitInt(void);
 
 /** Read a single bit from an 8-bit device register.
  * @param devAddr I2C slave device address
@@ -249,7 +249,7 @@ uint8_t I2Cdev_readWords(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint1
  */
 uint8_t I2Cdev_writeBit(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint8_t data) {
 	uint8_t b;
-	I2Cdev_readByte(devAddr, regAddr, &b);
+	I2Cdev_readByte(devAddr, regAddr, &b, I2Cdev_readTimeout);
 	b = (data != 0) ? (b | (1 << bitNum)) : (b & ~(1 << bitNum));
 	return I2Cdev_writeByte(devAddr, regAddr, b);
 }
@@ -263,7 +263,7 @@ uint8_t I2Cdev_writeBit(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint8_
  */
 uint8_t I2Cdev_writeBitW(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint16_t data) {
 	uint16_t w;
-	I2Cdev_readWord(devAddr, regAddr, &w);
+	I2Cdev_readWord(devAddr, regAddr, &w, I2Cdev_readTimeout);
 	w = (data != 0) ? (w | (1 << bitNum)) : (w & ~(1 << bitNum));
 	return I2Cdev_writeWord(devAddr, regAddr, w);
 }
@@ -285,7 +285,7 @@ uint8_t I2Cdev_writeBits(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, uin
 	// 10100011 original & ~mask
 	// 10101011 masked | value
 	uint8_t b;
-	if (readByte(devAddr, regAddr, &b) != 0) {
+	if (I2Cdev_readByte(devAddr, regAddr, &b, I2Cdev_readTimeout) != 0) {
 		uint8_t mask = ((1 << length) - 1) << (bitStart - length + 1);
 		data <<= (bitStart - length + 1); // shift data into correct position
 		data &= mask; // zero all non-important bits in data
@@ -293,7 +293,7 @@ uint8_t I2Cdev_writeBits(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, uin
 		b |= data; // combine data with existing byte
 		return I2Cdev_writeByte(devAddr, regAddr, b);
 	} else {
-		return false;
+		return 0;
 	}
 }
 
@@ -314,7 +314,7 @@ uint8_t I2Cdev_writeBitsW(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, ui
 	// 1010001110010110 original & ~mask
 	// 1010101110010110 masked | value
 	uint16_t w;
-	if (readWord(devAddr, regAddr, &w) != 0) {
+	if (I2Cdev_readWord(devAddr, regAddr, &w, I2Cdev_readTimeout) != 0) {
 		uint16_t mask = ((1 << length) - 1) << (bitStart - length + 1);
 		data <<= (bitStart - length + 1); // shift data into correct position
 		data &= mask; // zero all non-important bits in data
@@ -322,7 +322,7 @@ uint8_t I2Cdev_writeBitsW(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, ui
 		w |= data; // combine data with existing word
 		return I2Cdev_writeWord(devAddr, regAddr, w);
 	} else {
-		return false;
+		return 0;
 	}
 }
 
@@ -452,7 +452,7 @@ FastWire
  [used by Jeff Rowberg for I2Cdevlib with permission]
  */
 
-uint8_t Fastwire_waitInt() {
+uint8_t Fastwire_waitInt(void) {
 	int l = 250;
 	while (!(TWCR & (1 << TWINT)) && l-- > 0);
 	return l > 0;
@@ -609,11 +609,11 @@ uint8_t Fastwire_readBuf(uint8_t device, uint8_t address, uint8_t *data, uint8_t
 	return 0;
 }
 
-void Fastwire_reset() {
+void Fastwire_reset(void) {
 	TWCR = 0;
 }
 
-uint8_t Fastwire_stop() {
+uint8_t Fastwire_stop(void) {
 	TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO);
 	if (!Fastwire_waitInt()) return 1;
 	return 0;
