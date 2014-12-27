@@ -61,7 +61,7 @@ void MPU6050_initialize(void) {
     MPU6050_setClockSource(MPU6050_CLOCK_PLL_XGYRO);
     MPU6050_setFullScaleGyroRange(MPU6050_GYRO_FS_250);
     MPU6050_setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
-    MPU6050_setSleepEnabled(false); // thanks to Jack Elston for pointing this one out!
+    MPU6050_setSleepEnabled(0); // thanks to Jack Elston for pointing this one out!
 }
 
 /** Verify the I2C connection.
@@ -2132,7 +2132,7 @@ void MPU6050_setSlaveDelayEnabled(uint8_t num, uint8_t enabled) {
  * @see MPU6050_PATHRESET_GYRO_RESET_BIT
  */
 void MPU6050_resetGyroscopePath(void) {
-    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_SIGNAL_PATH_RESET, MPU6050_PATHRESET_GYRO_RESET_BIT, true);
+    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_SIGNAL_PATH_RESET, MPU6050_PATHRESET_GYRO_RESET_BIT, 1);
 }
 /** Reset accelerometer signal path.
  * The reset will revert the signal path analog to digital converters and
@@ -2141,7 +2141,7 @@ void MPU6050_resetGyroscopePath(void) {
  * @see MPU6050_PATHRESET_ACCEL_RESET_BIT
  */
 void MPU6050_resetAccelerometerPath(void) {
-    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_SIGNAL_PATH_RESET, MPU6050_PATHRESET_ACCEL_RESET_BIT, true);
+    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_SIGNAL_PATH_RESET, MPU6050_PATHRESET_ACCEL_RESET_BIT, 1);
 }
 /** Reset temperature sensor signal path.
  * The reset will revert the signal path analog to digital converters and
@@ -2150,7 +2150,7 @@ void MPU6050_resetAccelerometerPath(void) {
  * @see MPU6050_PATHRESET_TEMP_RESET_BIT
  */
 void MPU6050_resetTemperaturePath(void) {
-    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_SIGNAL_PATH_RESET, MPU6050_PATHRESET_TEMP_RESET_BIT, true);
+    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_SIGNAL_PATH_RESET, MPU6050_PATHRESET_TEMP_RESET_BIT, 1);
 }
 
 // MOT_DETECT_CTRL register
@@ -2319,7 +2319,7 @@ void MPU6050_switchSPIEnabled(uint8_t enabled) {
  * @see MPU6050_USERCTRL_FIFO_RESET_BIT
  */
 void MPU6050_resetFIFO(void) {
-    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_FIFO_RESET_BIT, true);
+    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_FIFO_RESET_BIT, 1);
 }
 /** Reset the I2C Master.
  * This bit resets the I2C Master when set to 1 while I2C_MST_EN equals 0.
@@ -2328,7 +2328,7 @@ void MPU6050_resetFIFO(void) {
  * @see MPU6050_USERCTRL_I2C_MST_RESET_BIT
  */
 void MPU6050_resetI2CMaster(void) {
-    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_I2C_MST_RESET_BIT, true);
+    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_I2C_MST_RESET_BIT, 1);
 }
 /** Reset all sensor registers and signal paths.
  * When set to 1, this bit resets the signal paths for all sensors (gyroscopes,
@@ -2343,7 +2343,7 @@ void MPU6050_resetI2CMaster(void) {
  * @see MPU6050_USERCTRL_SIG_COND_RESET_BIT
  */
 void MPU6050_resetSensors(void) {
-    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_SIG_COND_RESET_BIT, true);
+    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_SIG_COND_RESET_BIT, 1);
 }
 
 // PWR_MGMT_1 register
@@ -2354,7 +2354,7 @@ void MPU6050_resetSensors(void) {
  * @see MPU6050_PWR1_DEVICE_RESET_BIT
  */
 void MPU6050_reset(void) {
-    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_DEVICE_RESET_BIT, true);
+    I2Cdev_writeBit(MPU6050_devAddr, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_DEVICE_RESET_BIT, 1);
 }
 /** Get sleep mode status.
  * Setting the SLEEP bit in the register puts the device into very low power
