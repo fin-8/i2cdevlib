@@ -207,6 +207,7 @@ uint8_t I2Cdev_readWords(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint1
 	#endif
 
 	int8_t count = 0;
+	uint16_t timeout = I2Cdev_readTimeout;
 	uint32_t t1 = millis();
 
 	// Fastwire library
