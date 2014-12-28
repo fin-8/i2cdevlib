@@ -2965,8 +2965,8 @@ uint8_t MPU6050_writeMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t
 	MPU6050_setMemoryBank(bank, 0, 0);
 	MPU6050_setMemoryStartAddress(address);
 	uint8_t chunkSize;
-	uint8_t *verifyBuffer;
-	uint8_t *progBuffer;
+	uint8_t *verifyBuffer = 0;
+	uint8_t *progBuffer = 0;
 	uint16_t i;
 	uint8_t j;
 	if (verify) verifyBuffer = (uint8_t *)malloc(MPU6050_DMP_MEMORY_CHUNK_SIZE);
@@ -3041,7 +3041,7 @@ uint8_t MPU6050_writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uin
 	return MPU6050_writeMemoryBlock(data, dataSize, bank, address, verify, 1);
 }
 uint8_t MPU6050_writeDMPConfigurationSet(const uint8_t *data, uint16_t dataSize, uint8_t useProgMem) {
-	uint8_t *progBuffer, success, special;
+	uint8_t *progBuffer = 0, success, special;
 	uint16_t i, j;
 	if (useProgMem) {
 		progBuffer = (uint8_t *)malloc(8); // assume 8-byte blocks, realloc later if necessary
