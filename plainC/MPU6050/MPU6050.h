@@ -39,17 +39,9 @@ THE SOFTWARE.
 
 #include "I2Cdev.h"
 
-// supporting link:  http://forum.arduino.cc/index.php?&topic=143444.msg1079517#msg1079517
-// also: http://forum.arduino.cc/index.php?&topic=141571.msg1062899#msg1062899s
-#ifndef __arm__
 #include <avr/pgmspace.h>
-#else
-#define PROGMEM /* empty */
-#define pgm_read_byte(x) (*(x))
-#define pgm_read_word(x) (*(x))
-#define pgm_read_float(x) (*(x))
-#define PSTR(STR) STR
-#endif
+#include <stdlib.h> // malloc(), realloc(), free()
+#include <string.h> // memcmp()
 
 
 #define MPU6050_ADDRESS_AD0_LOW     0x68 // address pin low (GND), default for InvenSense evaluation board
@@ -410,62 +402,62 @@ THE SOFTWARE.
 
 void MPU6050_setAddress(uint8_t address);
 
-void MPU6050_MPU6050_initialize(void);
-uint8_t MPU6050_MPU6050_testConnection(void);
+void MPU6050_initialize(void);
+uint8_t MPU6050_testConnection(void);
 
 // AUX_VDDIO register
-uint8_t MPU6050_MPU6050_getAuxVDDIOLevel(void);
-void MPU6050_MPU6050_setAuxVDDIOLevel(uint8_t level);
+uint8_t MPU6050_getAuxVDDIOLevel(void);
+void MPU6050_setAuxVDDIOLevel(uint8_t level);
 
 // SMPLRT_DIV register
-uint8_t MPU6050_MPU6050_getRate(void);
-void MPU6050_MPU6050_setRate(uint8_t rate);
+uint8_t MPU6050_getRate(void);
+void MPU6050_setRate(uint8_t rate);
 
 // CONFIG register
-uint8_t MPU6050_MPU6050_getExternalFrameSync(void);
-void MPU6050_MPU6050_setExternalFrameSync(uint8_t sync);
-uint8_t MPU6050_MPU6050_getDLPFMode(void);
-void MPU6050_MPU6050_setDLPFMode(uint8_t bandwidth);
+uint8_t MPU6050_getExternalFrameSync(void);
+void MPU6050_setExternalFrameSync(uint8_t sync);
+uint8_t MPU6050_getDLPFMode(void);
+void MPU6050_setDLPFMode(uint8_t bandwidth);
 
 // GYRO_CONFIG register
-uint8_t MPU6050_MPU6050_getFullScaleGyroRange(void);
-void MPU6050_MPU6050_setFullScaleGyroRange(uint8_t range);
+uint8_t MPU6050_getFullScaleGyroRange(void);
+void MPU6050_setFullScaleGyroRange(uint8_t range);
 
 // ACCEL_CONFIG register
-uint8_t MPU6050_MPU6050_getAccelXSelfTest(void);
-void MPU6050_MPU6050_setAccelXSelfTest(uint8_t enabled);
-uint8_t MPU6050_MPU6050_getAccelYSelfTest(void);
-void MPU6050_MPU6050_setAccelYSelfTest(uint8_t enabled);
-uint8_t MPU6050_MPU6050_getAccelZSelfTest(void);
-void MPU6050_MPU6050_setAccelZSelfTest(uint8_t enabled);
-uint8_t MPU6050_MPU6050_getFullScaleAccelRange(void);
-void MPU6050_MPU6050_setFullScaleAccelRange(uint8_t range);
-uint8_t MPU6050_MPU6050_getDHPFMode(void);
-void MPU6050_MPU6050_setDHPFMode(uint8_t mode);
+uint8_t MPU6050_getAccelXSelfTest(void);
+void MPU6050_setAccelXSelfTest(uint8_t enabled);
+uint8_t MPU6050_getAccelYSelfTest(void);
+void MPU6050_setAccelYSelfTest(uint8_t enabled);
+uint8_t MPU6050_getAccelZSelfTest(void);
+void MPU6050_setAccelZSelfTest(uint8_t enabled);
+uint8_t MPU6050_getFullScaleAccelRange(void);
+void MPU6050_setFullScaleAccelRange(uint8_t range);
+uint8_t MPU6050_getDHPFMode(void);
+void MPU6050_setDHPFMode(uint8_t mode);
 
 // FF_THR register
-uint8_t MPU6050_MPU6050_getFreefallDetectionThreshold(void);
-void MPU6050_MPU6050_setFreefallDetectionThreshold(uint8_t threshold);
+uint8_t MPU6050_getFreefallDetectionThreshold(void);
+void MPU6050_setFreefallDetectionThreshold(uint8_t threshold);
 
 // FF_DUR register
-uint8_t MPU6050_MPU6050_getFreefallDetectionDuration(void);
-void MPU6050_MPU6050_setFreefallDetectionDuration(uint8_t duration);
+uint8_t MPU6050_getFreefallDetectionDuration(void);
+void MPU6050_setFreefallDetectionDuration(uint8_t duration);
 
 // MOT_THR register
-uint8_t MPU6050_MPU6050_getMotionDetectionThreshold(void);
-void MPU6050_MPU6050_setMotionDetectionThreshold(uint8_t threshold);
+uint8_t MPU6050_getMotionDetectionThreshold(void);
+void MPU6050_setMotionDetectionThreshold(uint8_t threshold);
 
 // MOT_DUR register
-uint8_t MPU6050_MPU6050_getMotionDetectionDuration(void);
-void MPU6050_MPU6050_setMotionDetectionDuration(uint8_t duration);
+uint8_t MPU6050_getMotionDetectionDuration(void);
+void MPU6050_setMotionDetectionDuration(uint8_t duration);
 
 // ZRMOT_THR register
-uint8_t MPU6050_MPU6050_getZeroMotionDetectionThreshold(void);
-void MPU6050_MPU6050_setZeroMotionDetectionThreshold(uint8_t threshold);
+uint8_t MPU6050_getZeroMotionDetectionThreshold(void);
+void MPU6050_setZeroMotionDetectionThreshold(uint8_t threshold);
 
 // ZRMOT_DUR register
-uint8_t MPU6050_MPU6050_getZeroMotionDetectionDuration(void);
-void MPU6050_MPU6050_setZeroMotionDetectionDuration(uint8_t duration);
+uint8_t MPU6050_getZeroMotionDetectionDuration(void);
+void MPU6050_setZeroMotionDetectionDuration(uint8_t duration);
 
 // FIFO_EN register
 uint8_t MPU6050_getTempFIFOEnabled(void);
@@ -760,7 +752,7 @@ void MPU6050_setDMPEnabled(uint8_t enabled);
 void MPU6050_resetDMP(void);
 
 // BANK_SEL register
-void MPU6050_setMemoryBank(uint8_t bank, uint8_t prefetchEnabled=false, uint8_t userBank=false);
+void MPU6050_setMemoryBank(uint8_t bank, uint8_t prefetchEnabled, uint8_t userBank);
 
 // MEM_START_ADDR register
 void MPU6050_setMemoryStartAddress(uint8_t address);
@@ -768,11 +760,11 @@ void MPU6050_setMemoryStartAddress(uint8_t address);
 // MEM_R_W register
 uint8_t MPU6050_readMemoryByte(void);
 void MPU6050_writeMemoryByte(uint8_t data);
-void MPU6050_readMemoryBlock(uint8_t *data, uint16_t dataSize, uint8_t bank=0, uint8_t address=0);
-uint8_t MPU6050_writeMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank=0, uint8_t address=0, uint8_t verify=true, uint8_t useProgMem=false);
-uint8_t MPU6050_writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank=0, uint8_t address=0, uint8_t verify=true);
+void MPU6050_readMemoryBlock(uint8_t *data, uint16_t dataSize, uint8_t bank, uint8_t address);
+uint8_t MPU6050_writeMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank, uint8_t address, uint8_t verify, uint8_t useProgMem);
+uint8_t MPU6050_writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank, uint8_t address, uint8_t verify);
 
-uint8_t MPU6050_writeDMPConfigurationSet(const uint8_t *data, uint16_t dataSize, uint8_t useProgMem=false);
+uint8_t MPU6050_writeDMPConfigurationSet(const uint8_t *data, uint16_t dataSize, uint8_t useProgMem);
 uint8_t MPU6050_writeProgDMPConfigurationSet(const uint8_t *data, uint16_t dataSize);
 
 // DMP_CFG_1 register
