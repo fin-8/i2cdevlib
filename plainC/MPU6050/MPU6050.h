@@ -39,6 +39,20 @@ THE SOFTWARE.
 
 #include "I2Cdev.h"
 
+// supporting link:  http://forum.arduino.cc/index.php?&topic=143444.msg1079517#msg1079517
+// also: http://forum.arduino.cc/index.php?&topic=141571.msg1062899#msg1062899s
+//#ifndef __arm__
+#include <avr/pgmspace.h>
+#include <stdlib.h> // malloc(), realloc(), free()
+#include <string.h> // memcmp()
+//#else
+//#define PROGMEM /* empty */
+//#define pgm_read_byte(x) (*(x))
+//#define pgm_read_word(x) (*(x))
+//#define pgm_read_float(x) (*(x))
+//#define PSTR(STR) STR
+//#endif
+
 
 #define MPU6050_ADDRESS_AD0_LOW     0x68 // address pin low (GND), default for InvenSense evaluation board
 #define MPU6050_ADDRESS_AD0_HIGH    0x69 // address pin high (VCC)
@@ -671,5 +685,104 @@ void MPU6050_getFIFOBytes(uint8_t *data, uint8_t length);
 // WHO_AM_I register
 uint8_t MPU6050_getDeviceID(void);
 void MPU6050_setDeviceID(uint8_t id);
+
+// ======== UNDOCUMENTED/DMP REGISTERS/METHODS ========
+
+// XG_OFFS_TC register
+uint8_t MPU6050_getOTPBankValid(void);
+void MPU6050_setOTPBankValid(uint8_t enabled);
+int8_t MPU6050_getXGyroOffsetTC(void);
+void MPU6050_setXGyroOffsetTC(int8_t offset);
+
+// YG_OFFS_TC register
+int8_t MPU6050_getYGyroOffsetTC(void);
+void MPU6050_setYGyroOffsetTC(int8_t offset);
+
+// ZG_OFFS_TC register
+int8_t MPU6050_getZGyroOffsetTC(void);
+void MPU6050_setZGyroOffsetTC(int8_t offset);
+
+// X_FINE_GAIN register
+int8_t MPU6050_getXFineGain(void);
+void MPU6050_setXFineGain(int8_t gain);
+
+// Y_FINE_GAIN register
+int8_t MPU6050_getYFineGain(void);
+void MPU6050_setYFineGain(int8_t gain);
+
+// Z_FINE_GAIN register
+int8_t MPU6050_getZFineGain(void);
+void MPU6050_setZFineGain(int8_t gain);
+
+// XA_OFFS_* registers
+int16_t MPU6050_getXAccelOffset(void);
+void MPU6050_setXAccelOffset(int16_t offset);
+
+// YA_OFFS_* register
+int16_t MPU6050_getYAccelOffset(void);
+void MPU6050_setYAccelOffset(int16_t offset);
+
+// ZA_OFFS_* register
+int16_t MPU6050_getZAccelOffset(void);
+void MPU6050_setZAccelOffset(int16_t offset);
+
+// XG_OFFS_USR* registers
+int16_t MPU6050_getXGyroOffset(void);
+void MPU6050_setXGyroOffset(int16_t offset);
+
+// YG_OFFS_USR* register
+int16_t MPU6050_getYGyroOffset(void);
+void MPU6050_setYGyroOffset(int16_t offset);
+
+// ZG_OFFS_USR* register
+int16_t MPU6050_getZGyroOffset(void);
+void MPU6050_setZGyroOffset(int16_t offset);
+
+// INT_ENABLE register (DMP functions)
+uint8_t MPU6050_getIntPLLReadyEnabled(void);
+void MPU6050_setIntPLLReadyEnabled(uint8_t enabled);
+uint8_t MPU6050_getIntDMPEnabled(void);
+void MPU6050_setIntDMPEnabled(uint8_t enabled);
+
+// DMP_INT_STATUS
+uint8_t MPU6050_getDMPInt5Status(void);
+uint8_t MPU6050_getDMPInt4Status(void);
+uint8_t MPU6050_getDMPInt3Status(void);
+uint8_t MPU6050_getDMPInt2Status(void);
+uint8_t MPU6050_getDMPInt1Status(void);
+uint8_t MPU6050_getDMPInt0Status(void);
+
+// INT_STATUS register (DMP functions)
+uint8_t MPU6050_getIntPLLReadyStatus(void);
+uint8_t MPU6050_getIntDMPStatus(void);
+
+// USER_CTRL register (DMP functions)
+uint8_t MPU6050_getDMPEnabled(void);
+void MPU6050_setDMPEnabled(uint8_t enabled);
+void MPU6050_resetDMP(void);
+
+// BANK_SEL register
+void MPU6050_setMemoryBank(uint8_t bank, uint8_t prefetchEnabled, uint8_t userBank);
+
+// MEM_START_ADDR register
+void MPU6050_setMemoryStartAddress(uint8_t address);
+
+// MEM_R_W register
+uint8_t MPU6050_readMemoryByte(void);
+void MPU6050_writeMemoryByte(uint8_t data);
+void MPU6050_readMemoryBlock(uint8_t *data, uint16_t dataSize, uint8_t bank, uint8_t address);
+uint8_t MPU6050_writeMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank, uint8_t address, uint8_t verify, uint8_t useProgMem);
+uint8_t MPU6050_writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank, uint8_t address, uint8_t verify);
+
+uint8_t MPU6050_writeDMPConfigurationSet(const uint8_t *data, uint16_t dataSize, uint8_t useProgMem);
+uint8_t MPU6050_writeProgDMPConfigurationSet(const uint8_t *data, uint16_t dataSize);
+
+// DMP_CFG_1 register
+uint8_t MPU6050_getDMPConfig1(void);
+void MPU6050_setDMPConfig1(uint8_t config);
+
+// DMP_CFG_2 register
+uint8_t MPU6050_getDMPConfig2(void);
+void MPU6050_setDMPConfig2(uint8_t config);
 
 #endif /* __MPU6050_H__ */
